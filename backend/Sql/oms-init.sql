@@ -1,5 +1,5 @@
-CREATE database if NOT EXISTS `fyrn` default character set utf8mb4 collate utf8mb4_unicode_ci;
-use `fyrn`;
+CREATE database if NOT EXISTS `home` default character set utf8mb4 collate utf8mb4_unicode_ci;
+use `home`;
 
 SET NAMES utf8mb4;
 

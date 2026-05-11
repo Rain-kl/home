@@ -70,7 +70,7 @@ public class StartupHelper {
                         \t\
                         OS: \t\t{} ({})
                         ----------------------------------------------------------""",
-                env.getProperty("spring.application.name", "Fyrn"),
+                env.getProperty("spring.application.name", "Home"),
                 protocol, serverPort, contextPath,
                 protocol, hostAddress, serverPort, contextPath,
                 env.getActiveProfiles(),

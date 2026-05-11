@@ -1,9 +1,9 @@
-fyrn:
+home:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     host: localhost
     port: 3306
-    database: fyrn
+    database: home
     username: root
     password: root
 
@@ -12,14 +12,6 @@ fyrn:
     port: 6379
     password: root
     database: 0
-
-  oss:
-    protocol: s3
-    access-key-id: eZkIBk8WaWlfxjCx5OAW
-    access-key-secret: 5smkTin7spqzPpfHH82UphdBS2YBhr1W3f1muzUT
-    bucket-name: fyrn
-    endpoint: http://localhost:9000
-    region: us-west-1
 
   logging:
     level: info

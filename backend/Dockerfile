@@ -9,7 +9,7 @@ FROM amazoncorretto:17-alpine3.21
 WORKDIR /app
 
 # Copy the jar file
-COPY --from=build /app/fyrn-aggregation/target/fyrn-aggregation.jar app.jar
+COPY --from=build /app/home-aggregation/target/home-aggregation.jar app.jar
 
 # Create config directory
 RUN mkdir -p /app/config

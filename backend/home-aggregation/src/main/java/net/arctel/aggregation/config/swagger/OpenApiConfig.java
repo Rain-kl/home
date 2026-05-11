@@ -27,10 +27,10 @@ import org.springframework.context.annotation.Configuration;
 public class OpenApiConfig {
 
     @Bean
-    public OpenAPI fyrnOpenAPI() {
+    public OpenAPI homeOpenAPI() {
         return new OpenAPI()
-                .info(new Info().title("Fyrn Backend API")
-                        .description("Fyrn 应用程序接口文档")
+                .info(new Info().title("Home Backend API")
+                        .description("Home 应用程序接口文档")
                         .version("v0.0.1")
                         .license(new License().name("Apache 2.0").url("http://springdoc.org")));
     }

@@ -35,7 +35,7 @@
     <!-- 统一属性配置 -->
     <!-- ====================================================================== -->
     <properties>
-        <fyrn.version>${project.version}</fyrn.version>
+        <home.version>${project.version}</home.version>
         <axion.version>1.0-SNAPSHOT</axion.version>
         <oms.version>1.0-SNAPSHOT</oms.version>
     </properties>
@@ -47,44 +47,16 @@
         <dependencies>
 
             <!-- ==================== 内部模块版本管理 ==================== -->
-            <!-- Fyrn 核心模块 -->
+            <!-- home 核心模块 -->
             <dependency>
                 <groupId>net.arctel</groupId>
                 <artifactId>home-common</artifactId>
-                <version>${fyrn.version}</version>
+                <version>${home.version}</version>
             </dependency>
-
-            <!-- Fyrn MMS 模块 -->
-            <dependency>
+          <dependency>
                 <groupId>net.arctel</groupId>
-                <artifactId>fyrn-mms-api</artifactId>
-                <version>${fyrn.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.arctel</groupId>
-                <artifactId>fyrn-mms-domain</artifactId>
-                <version>${fyrn.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.arctel</groupId>
-                <artifactId>fyrn-mms-service</artifactId>
-                <version>${fyrn.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>net.arctel</groupId>
-                <artifactId>wb-api</artifactId>
-                <version>${fyrn.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.arctel</groupId>
-                <artifactId>wb-model</artifactId>
-                <version>${fyrn.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.arctel</groupId>
-                <artifactId>wb-service</artifactId>
-                <version>${fyrn.version}</version>
+                <artifactId>home-cms</artifactId>
+                <version>${home.version}</version>
             </dependency>
 
             <!--
@@ -99,39 +71,6 @@
                 <scope>import</scope>
             </dependency>
 
-            <!--
-                OPKIT 模块版本管理
-            -->
-            <dependency>
-                <groupId>net.arctel.platform</groupId>
-                <artifactId>opkit-agent</artifactId>
-                <version>${fyrn.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.arctel.platform</groupId>
-                <artifactId>opkit-api</artifactId>
-                <version>${fyrn.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.arctel.platform</groupId>
-                <artifactId>opkit-service</artifactId>
-                <version>${fyrn.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.arctel.platform</groupId>
-                <artifactId>opkit-domain</artifactId>
-                <version>${fyrn.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.arctel.platform</groupId>
-                <artifactId>opkit-common</artifactId>
-                <version>${fyrn.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.arctel.platform</groupId>
-                <artifactId>opkit-app</artifactId>
-                <version>${fyrn.version}</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 

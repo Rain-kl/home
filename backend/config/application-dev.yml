@@ -1,9 +1,9 @@
-fyrn:
+home:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     host: host.docker.internal
     port: 3306
-    database: fyrn
+    database: home
     username: root
     password: root
 
@@ -11,14 +11,6 @@ fyrn:
     host: host.docker.internal
     port: 6379
     password: root
-
-  oss:
-    protocol: s3
-    access-key-id: eZkIBk8WaWlfxjCx5OAW
-    access-key-secret: 5smkTin7spqzPpfHH82UphdBS2YBhr1W3f1muzUT
-    bucket-name: fyrn
-    endpoint: http://host.docker.internal:9000
-    region: us-east-1
 
   logging:
     level: INFO

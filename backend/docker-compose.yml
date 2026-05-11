@@ -1,6 +1,6 @@
 version: "3.8"
 services:
-  fyrn-backend:
+  home-backend:
     build: .
     ports:
       - "45600:45600"

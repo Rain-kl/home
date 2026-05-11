@@ -6,24 +6,23 @@
 
     <parent>
         <groupId>net.arctel</groupId>
-        <artifactId>fyrn</artifactId>
+        <artifactId>home</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>home-aggregation</artifactId>
-    <name>Fyrn - Aggregation Module</name>
-    <description>Fyrn 聚合启动模块, 整合所有服务模块作为统一入口</description>
+    <name>Home - Aggregation Module</name>
+    <description>Home 聚合启动模块, 整合所有服务模块作为统一入口</description>
 
     <dependencies>
-        <!-- Fyrn 模块 -->
         <dependency>
             <groupId>net.arctel</groupId>
-            <artifactId>fyrn-mms-service</artifactId>
+            <artifactId>home-cms</artifactId>
         </dependency>
-        <!-- Fyrn 模块 -->
+
         <dependency>
             <groupId>net.arctel</groupId>
-            <artifactId>wb-service</artifactId>
+            <artifactId>home-common</artifactId>
         </dependency>
 
         <!-- framework 模块 -->
@@ -42,22 +41,6 @@
             <artifactId>oms-starter</artifactId>
         </dependency>
 
-      <!-- OPKIT 模块 -->
-        <dependency>
-            <groupId>net.arctel.platform</groupId>
-            <artifactId>opkit-agent</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>net.arctel.platform</groupId>
-            <artifactId>opkit-service</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>net.arctel.platform</groupId>
-            <artifactId>opkit-app</artifactId>
-        </dependency>
 
         <!-- Spring 相关 -->
         <dependency>

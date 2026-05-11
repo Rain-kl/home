@@ -6,13 +6,13 @@
 
     <parent>
         <groupId>net.arctel</groupId>
-        <artifactId>fyrn</artifactId>
+        <artifactId>home</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>home-common</artifactId>
-    <name>Fyrn - Common Module</name>
-    <description>Fyrn 公共模块, 包含通用工具类、配置、基础组件等</description>
+    <name>Home - Common Module</name>
+    <description>Home 公共模块, 包含通用工具类、配置、基础组件等</description>
 
     <dependencies>
         <!-- OMS 公共依赖 (跨模块共享) -->
