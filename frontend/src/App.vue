@@ -26,9 +26,9 @@
         <component :is="store.mobileOpenState ? CloseSmall : HamburgerButton" />
       </Icon>
       <!-- 页脚 -->
-      <Transition name="fade" mode="out-in">
-        <Footer class="f-ter" v-show="!store.backgroundShow && !store.setOpenState" />
-      </Transition>
+<!--      <Transition name="fade" mode="out-in">-->
+<!--        <Footer class="f-ter" v-show="!store.backgroundShow && !store.setOpenState" />-->
+<!--      </Transition>-->
     </main>
   </Transition>
 </template>

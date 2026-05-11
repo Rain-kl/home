@@ -21,7 +21,7 @@
               <span> {{ currentTime.hour }}:{{ currentTime.minute }}:{{ currentTime.second }}</span>
             </div>
           </div>
-          <Weather />
+<!--          <Weather />-->
         </div>
       </el-col>
     </el-row>
@@ -122,7 +122,7 @@ onBeforeUnmount(() => {
           white-space: nowrap;
         }
         .text {
-          margin-top: 10px;
+          margin-top: 20px;
           font-size: 3.25rem;
           letter-spacing: 2px;
           font-family: "UnidreamLED";
