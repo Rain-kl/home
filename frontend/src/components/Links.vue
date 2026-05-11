@@ -28,7 +28,7 @@
               @click="jumpLink(item)"
             >
               <Icon size="26">
-                <component :is="siteIcon[item.icon]" />
+                <component :is="siteIcon[item.icon] || Link" />
               </Icon>
               <span class="name text-hidden">{{ item.name }}</span>
             </div>
@@ -47,15 +47,17 @@ import { Link, Blog, CompactDisc, Cloud, Compass, Book, Fire, LaptopCode } from 
 import { mainStore } from "@/store";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { Pagination, Mousewheel } from "swiper/modules";
-import siteLinks from "@/assets/siteLinks.json";
+import defaultSiteLinks from "@/assets/siteLinks.json";
+import { getSiteLinks } from "@/api";
 
 const store = mainStore();
+const siteLinks = ref(defaultSiteLinks);
 
 // 计算网站链接
 const siteLinksList = computed(() => {
   const result = [];
-  for (let i = 0; i < siteLinks.length; i += 6) {
-    const subArr = siteLinks.slice(i, i + 6);
+  for (let i = 0; i < siteLinks.value.length; i += 6) {
+    const subArr = siteLinks.value.slice(i, i + 6);
     result.push(subArr);
   }
   return result;
@@ -82,7 +84,15 @@ const jumpLink = (data) => {
 };
 
 onMounted(() => {
-  console.log(siteLinks);
+  getSiteLinks()
+    .then((links) => {
+      if (Array.isArray(links) && links.length > 0) {
+        siteLinks.value = links;
+      }
+    })
+    .catch(() => {
+      siteLinks.value = defaultSiteLinks;
+    });
 });
 </script>
 

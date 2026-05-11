@@ -1,6 +1,48 @@
 // import axios from "axios";
 import fetchJsonp from "fetch-jsonp";
 
+const HOME_API_PREFIX = "/api";
+
+const request = async (url, options = {}) => {
+  const res = await fetch(`${HOME_API_PREFIX}${url}`, {
+    credentials: "include",
+    ...options,
+    headers: {
+      ...(options.body instanceof FormData ? {} : { "Content-Type": "application/json" }),
+      ...options.headers,
+    },
+  });
+  const data = await res.json();
+  if (data.code !== 200) {
+    throw new Error(data.msg || "请求失败");
+  }
+  return data.data;
+};
+
+export const getSiteLinks = () => request("/pub/site-links");
+
+export const getAdminSiteLinks = () => request("/cms/site-links");
+
+export const saveAdminSiteLinks = (links) =>
+  request("/cms/site-links", {
+    method: "POST",
+    body: JSON.stringify(links),
+  });
+
+export const loginAdmin = (username, password) =>
+  request("/oms/auth/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({ username, password }),
+  });
+
+export const getAdminInfo = () => request("/oms/auth/info");
+
+export const logoutAdmin = () =>
+  request("/oms/auth/logout", {
+    method: "POST",
+  });
+
 /**
  * 音乐播放器
  */

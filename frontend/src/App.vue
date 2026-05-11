@@ -3,9 +3,10 @@
   <Loading />
   <!-- 壁纸 -->
   <Background @loadComplete="loadComplete" />
+  <Admin v-if="isAdminPage" />
   <!-- 主界面 -->
   <Transition name="fade" mode="out-in">
-    <main id="main" v-if="store.imgLoadStatus">
+    <main id="main" v-if="store.imgLoadStatus && !isAdminPage">
       <div class="container" v-show="!store.backgroundShow">
         <section class="all" v-show="!store.setOpenState">
           <MainLeft />
@@ -45,10 +46,12 @@ import Background from "@/components/Background.vue";
 import Footer from "@/components/Footer.vue";
 import Box from "@/views/Box/index.vue";
 import MoreSet from "@/views/MoreSet/index.vue";
+import Admin from "@/views/Admin/index.vue";
 import cursorInit from "@/utils/cursor.js";
 import config from "@/../package.json";
 
 const store = mainStore();
+const isAdminPage = computed(() => window.location.pathname.startsWith("/admin"));
 
 // 页面宽度
 const getWidth = () => {
@@ -81,14 +84,14 @@ onMounted(() => {
   cursorInit();
 
   // 屏蔽右键
-  document.oncontextmenu = () => {
-    ElMessage({
-      message: "为了浏览体验，本站禁用右键",
-      grouping: true,
-      duration: 2000,
-    });
-    return false;
-  };
+  // document.oncontextmenu = () => {
+  //   ElMessage({
+  //     message: "为了浏览体验，本站禁用右键",
+  //     grouping: true,
+  //     duration: 2000,
+  //   });
+  //   return false;
+  // };
 
   // 鼠标中键事件
   window.addEventListener("mousedown", (event) => {

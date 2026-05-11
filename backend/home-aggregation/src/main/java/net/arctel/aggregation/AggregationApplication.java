@@ -19,6 +19,7 @@ package net.arctel.aggregation;
 
 import net.arctel.common.utils.StartupHelper;
 import net.arctel.platform.framework.annotation.AxionApplication;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
@@ -32,10 +33,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableScheduling
 @EnableCaching
 @EnableTransactionManagement
-//@MapperScan({"net.arctel.cms.mapper"})
+@MapperScan({"net.arctel.cms.mapper"})
 @ComponentScan(basePackages = {
         "net.arctel.aggregation",
         "net.arctel.common",
+        "net.arctel.cms",
 }, excludeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, classes = SpringBootApplication.class)})
 class AggregationApplication {
 
