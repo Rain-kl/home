@@ -9,8 +9,12 @@ import Components from "unplugin-vue-components/vite";
 import viteCompression from "vite-plugin-compression";
 
 // https://vitejs.dev/config/
-export default ({ mode }) =>
-  defineConfig({
+export default ({ mode }) => {
+  const env = loadEnv(mode, process.cwd());
+  const apiBaseUrl = env.VITE_API_BASE_URL || "/api";
+  const apiProxyTarget = env.VITE_API_PROXY_TARGET || "http://localhost:45600";
+
+  return defineConfig({
     plugins: [
       vue(),
       AutoImport({
@@ -43,9 +47,9 @@ export default ({ mode }) =>
           ],
         },
         manifest: {
-          name: loadEnv(mode, process.cwd()).VITE_SITE_NAME,
-          short_name: loadEnv(mode, process.cwd()).VITE_SITE_NAME,
-          description: loadEnv(mode, process.cwd()).VITE_SITE_DES,
+          name: env.VITE_SITE_NAME,
+          short_name: env.VITE_SITE_NAME,
+          description: env.VITE_SITE_DES,
           display: "standalone",
           start_url: "/",
           theme_color: "#424242",
@@ -94,6 +98,13 @@ export default ({ mode }) =>
     server: {
       port: "3000",
       open: true,
+      proxy: {
+        [apiBaseUrl]: {
+          target: apiProxyTarget,
+          changeOrigin: true,
+          rewrite: (path) => path.replace(new RegExp(`^${apiBaseUrl}`), ""),
+        },
+      },
     },
     resolve: {
       alias: [
@@ -121,3 +132,4 @@ export default ({ mode }) =>
       },
     },
   });
+};

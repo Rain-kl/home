@@ -1,7 +1,7 @@
 // import axios from "axios";
 import fetchJsonp from "fetch-jsonp";
 
-const HOME_API_PREFIX = "/api";
+const HOME_API_PREFIX = import.meta.env.VITE_API_BASE_URL || "/api";
 
 const request = async (url, options = {}) => {
   const res = await fetch(`${HOME_API_PREFIX}${url}`, {
