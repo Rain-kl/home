@@ -106,7 +106,13 @@
         <div v-else-if="activeSection === 'links'" class="link-editor">
           <div v-for="(item, index) in links" :key="item.localId" class="link-row">
             <div class="order">{{ index + 1 }}</div>
-            <el-select v-model="item.icon" class="icon-select" filterable placeholder="图标">
+            <el-select
+              v-model="item.icon"
+              class="icon-select"
+              filterable
+              placeholder="图标"
+              popper-class="admin-icon-popper"
+            >
               <el-option v-for="icon in iconOptions" :key="icon" :label="icon" :value="icon" />
             </el-select>
             <el-input v-model="item.name" class="name-input" placeholder="名称" />
@@ -692,10 +698,9 @@ onMounted(async () => {
 
 .social-row {
   display: grid;
-  grid-template-columns: 42px minmax(100px, 0.9fr) minmax(0, 1.35fr) minmax(0, 1fr) minmax(
-      0,
-      1.35fr
-    ) 56px 40px 40px 40px;
+  grid-template-columns:
+    42px minmax(100px, 0.9fr) minmax(0, 1.35fr) minmax(0, 1fr) minmax(0, 1.35fr)
+    56px 40px 40px 40px;
   gap: 10px;
   align-items: center;
   padding: 12px;
@@ -849,6 +854,36 @@ onMounted(async () => {
     .tip-input,
     .url-input {
       grid-column: 2 / 4;
+    }
+  }
+}
+</style>
+
+<style lang="scss">
+.admin-icon-popper.el-popper {
+  background: rgb(0 0 0 / 72%) !important;
+  border: 1px solid rgb(255 255 255 / 14%) !important;
+  box-shadow: 0 18px 48px rgb(0 0 0 / 32%) !important;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  .el-popper__arrow::before {
+    background: rgb(0 0 0 / 72%) !important;
+    border-color: rgb(255 255 255 / 14%) !important;
+  }
+
+  .el-select-dropdown__item {
+    color: rgb(255 255 255 / 88%);
+
+    &.hover,
+    &:hover {
+      background: rgb(255 255 255 / 10%);
+    }
+
+    &.selected {
+      color: #fff;
+      background: rgb(255 255 255 / 14%);
+      font-weight: 600;
     }
   }
 }
