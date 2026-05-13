@@ -1,0 +1,24 @@
+services:
+  home:
+    build: .
+    ports:
+      - "45600:45600"
+    restart: always
+    volumes:
+      - data:/app/data
+    environment:
+      TZ: Asia/Shanghai
+      APP_ENV: prod
+      HOST: 0.0.0.0
+      PORT: 45600
+      LOG_LEVEL: INFO
+      DATABASE_URL: sqlite:///./data/home.db
+      CORS_ORIGINS: "*"
+      SESSION_COOKIE_NAME: token
+      SESSION_TTL_SECONDS: 2592000
+      ADMIN_USERNAME: admin
+      ADMIN_PASSWORD: admin123
+      PUBLIC_CACHE_TTL_SECONDS: 30
+
+volumes:
+  data:
