@@ -18,9 +18,13 @@ const request = async (url, options = {}) => {
 
 export const getSiteLinks = () => request("/pub/site-links");
 
+export const getSocialLinks = () => request("/pub/social-links");
+
 export const getSiteConfig = () => request("/pub/site-config");
 
 export const getAdminSiteLinks = () => request("/cms/site-links");
+
+export const getAdminSocialLinks = () => request("/cms/social-links");
 
 export const getAdminSiteConfig = () => request("/cms/site-config");
 
@@ -32,6 +36,12 @@ export const saveAdminSiteConfig = (configs) =>
 
 export const saveAdminSiteLinks = (links) =>
   request("/cms/site-links", {
+    method: "POST",
+    body: JSON.stringify(links),
+  });
+
+export const saveAdminSocialLinks = (links) =>
+  request("/cms/social-links", {
     method: "POST",
     body: JSON.stringify(links),
   });

@@ -18,10 +18,25 @@
 </template>
 
 <script setup>
-import socialLinks from "@/assets/socialLinks.json";
+import defaultSocialLinks from "@/assets/socialLinks.json";
+import { getSocialLinks } from "@/api";
+
+const socialLinks = ref(defaultSocialLinks);
 
 // 社交链接提示
 const socialTip = ref("通过这里联系我吧");
+
+onMounted(() => {
+  getSocialLinks()
+    .then((links) => {
+      if (Array.isArray(links) && links.length > 0) {
+        socialLinks.value = links;
+      }
+    })
+    .catch(() => {
+      socialLinks.value = defaultSocialLinks;
+    });
+});
 </script>
 
 <style lang="scss" scoped>

@@ -29,6 +29,7 @@ def get_db() -> Generator[Session, None, None]:
 
 
 def init_db() -> None:
+    from home.models.social_link import CmsSocialLink
     from home.models.site_config import CmsSiteConfig
     from home.models.site_link import CmsSiteLink
     from home.repositories.site_config_repository import SiteConfigRepository
@@ -64,6 +65,54 @@ def init_db() -> None:
                         name="站点监测",
                         link="https://status.imsyy.top/",
                         sort_order=7,
+                    ),
+                ]
+            )
+            db.commit()
+        if db.query(CmsSocialLink).first() is None:
+            db.add_all(
+                [
+                    CmsSocialLink(
+                        name="Github",
+                        icon="/images/icon/github.png",
+                        tip="去 Github 看看",
+                        url="https://github.com/imsyy",
+                        sort_order=1,
+                    ),
+                    CmsSocialLink(
+                        name="BiliBili",
+                        icon="/images/icon/bilibili.png",
+                        tip="(゜-゜)つロ 干杯 ~",
+                        url="https://space.bilibili.com/98544142",
+                        sort_order=2,
+                    ),
+                    CmsSocialLink(
+                        name="QQ",
+                        icon="/images/icon/qq.png",
+                        tip="有什么事吗",
+                        url="https://res.abeim.cn/api/qq/?qq=1539250352",
+                        sort_order=3,
+                    ),
+                    CmsSocialLink(
+                        name="Email",
+                        icon="/images/icon/email.png",
+                        tip="来封 Email ~",
+                        url="mailto:one@imsyy.top",
+                        sort_order=4,
+                    ),
+                    CmsSocialLink(
+                        name="Twitter",
+                        icon="/images/icon/twitter.png",
+                        tip="你懂的 ~",
+                        url="https://twitter.com/iimmsyy",
+                        sort_order=5,
+                    ),
+                    CmsSocialLink(
+                        name="Telegram",
+                        icon="/images/icon/telegram.png",
+                        tip="你懂的 ~",
+                        url="https://t.me/bottom_user",
+                        sort_order=6,
                     ),
                 ]
             )

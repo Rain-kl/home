@@ -5,7 +5,12 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-from home.controllers import auth_controller, site_config_controller, site_link_controller
+from home.controllers import (
+    auth_controller,
+    site_config_controller,
+    site_link_controller,
+    social_link_controller,
+)
 from home.core.config import settings
 from home.core.database import init_db
 from home.middleware.exception_handlers import register_exception_handlers
@@ -36,13 +41,16 @@ def create_app() -> FastAPI:
     app.include_router(auth_controller.router)
     app.include_router(site_config_controller.router)
     app.include_router(site_link_controller.router)
+    app.include_router(social_link_controller.router)
     app.include_router(auth_controller.router, prefix="/api", include_in_schema=False)
     app.include_router(site_config_controller.router, prefix="/api", include_in_schema=False)
     app.include_router(site_link_controller.router, prefix="/api", include_in_schema=False)
+    app.include_router(social_link_controller.router, prefix="/api", include_in_schema=False)
 
     static_dir = Path(__file__).resolve().parents[1] / "static"
     index_file = static_dir / "index.html"
     if index_file.exists():
+
         @app.get("/", include_in_schema=False)
         async def serve_index():
             return FileResponse(index_file)

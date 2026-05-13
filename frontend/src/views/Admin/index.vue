@@ -66,8 +66,13 @@
             <h2>{{ activeMeta.title }}</h2>
           </div>
           <div class="header-actions">
-            <el-button v-if="activeSection === 'links'" :icon="Add" type="primary" @click="addLink">
-              新增链接
+            <el-button
+              v-if="activeSection === 'links' || activeSection === 'socials'"
+              :icon="Add"
+              type="primary"
+              @click="addCurrentItem"
+            >
+              {{ activeSection === "socials" ? "新增社交链接" : "新增链接" }}
             </el-button>
             <el-button :icon="Save" :loading="saving" @click="saveCurrentSection"
               >保存配置</el-button
@@ -75,7 +80,7 @@
           </div>
         </header>
 
-        <div v-if="activeSection !== 'links'" class="config-panel">
+        <div v-if="isConfigSection" class="config-panel">
           <div v-for="field in activeFields" :key="field.key" class="field-row">
             <label :for="field.key">
               <span>{{ field.label }}</span>
@@ -98,7 +103,7 @@
           </div>
         </div>
 
-        <div v-else class="link-editor">
+        <div v-else-if="activeSection === 'links'" class="link-editor">
           <div v-for="(item, index) in links" :key="item.localId" class="link-row">
             <div class="order">{{ index + 1 }}</div>
             <el-select v-model="item.icon" class="icon-select" filterable placeholder="图标">
@@ -130,6 +135,42 @@
             />
           </div>
         </div>
+
+        <div v-else class="social-editor">
+          <div v-for="(item, index) in socialLinks" :key="item.localId" class="social-row">
+            <div class="order">{{ index + 1 }}</div>
+            <el-input v-model="item.name" class="name-input" placeholder="名称" />
+            <el-input
+              v-model="item.icon"
+              class="icon-input"
+              placeholder="/images/icon/github.png"
+            />
+            <el-input v-model="item.tip" class="tip-input" placeholder="悬停提示语" />
+            <el-input v-model="item.url" class="url-input" placeholder="https://example.com" />
+            <el-switch v-model="item.enabledFlag" :active-value="1" :inactive-value="0" />
+            <el-button
+              :icon="Up"
+              circle
+              title="上移"
+              :disabled="index === 0"
+              @click="moveSocialLink(index, -1)"
+            />
+            <el-button
+              :icon="Down"
+              circle
+              title="下移"
+              :disabled="index === socialLinks.length - 1"
+              @click="moveSocialLink(index, 1)"
+            />
+            <el-button
+              :icon="Delete"
+              circle
+              title="删除"
+              type="danger"
+              @click="removeSocialLink(index)"
+            />
+          </div>
+        </div>
       </section>
     </section>
   </main>
@@ -150,12 +191,14 @@ import {
   Up,
 } from "@icon-park/vue-next";
 import {
+  getAdminSocialLinks,
   getAdminInfo,
   getAdminSiteConfig,
   getAdminSiteLinks,
   loginAdmin,
   logoutAdmin,
   saveAdminSiteConfig,
+  saveAdminSocialLinks,
   saveAdminSiteLinks,
 } from "@/api";
 import { defaultSiteConfig } from "@/utils/siteConfig";
@@ -181,7 +224,12 @@ const sectionMap = {
       ["siteUrl", "站点地址", "Logo 文本与页脚链接", "example.com"],
       ["siteLogo", "标签图标", "浏览器标题栏与书签图标", "/images/icon/favicon.ico"],
       ["siteMainLogo", "主页头像", "左侧主视觉 Logo", "/images/icon/logo.png"],
-      ["siteAppleLogo", "Apple 图标", "iOS 添加到主屏幕时使用", "/images/logo/apple-touch-icon.png"],
+      [
+        "siteAppleLogo",
+        "Apple 图标",
+        "iOS 添加到主屏幕时使用",
+        "/images/logo/apple-touch-icon.png",
+      ],
       ["siteStart", "建站日期", "YYYY-MM-DD 或 YYYY", "2020-10-24"],
       ["siteIcp", "ICP备案号", "留空则不显示", "豫ICP备..."],
       ["siteKeywords", "关键词", "用于站点元信息", "个人主页,导航"],
@@ -203,6 +251,10 @@ const sectionMap = {
     eyebrow: "外部服务",
     fields: [["weatherKey", "高德天气 Key", "留空则使用备用天气接口", ""]],
   },
+  socials: {
+    title: "社交链接",
+    eyebrow: "主页社交入口",
+  },
 };
 
 const navItems = [
@@ -210,6 +262,7 @@ const navItems = [
   { key: "description", label: "首页文案", icon: EditName },
   { key: "media", label: "天气服务", icon: SunOne },
   { key: "links", label: "导航链接", icon: LinkOne },
+  { key: "socials", label: "社交链接", icon: LinkOne },
 ];
 
 const isLogin = ref(false);
@@ -222,13 +275,19 @@ const loginForm = reactive({
 });
 const configForm = reactive({ ...defaultSiteConfig });
 const links = ref([]);
+const socialLinks = ref([]);
 
 const activeMeta = computed(() => {
   if (activeSection.value === "links") {
     return { title: "导航链接", eyebrow: "链接资源" };
   }
+  if (activeSection.value === "socials") {
+    return sectionMap.socials;
+  }
   return sectionMap[activeSection.value];
 });
+
+const isConfigSection = computed(() => !["links", "socials"].includes(activeSection.value));
 
 const activeFields = computed(() =>
   (sectionMap[activeSection.value]?.fields || []).map(
@@ -253,6 +312,18 @@ const normalizeLinks = (list) =>
     enabledFlag: item.enabledFlag ?? 1,
   }));
 
+const normalizeSocialLinks = (list) =>
+  list.map((item, index) => ({
+    localId: `${Date.now()}-social-${index}-${item.id || "new"}`,
+    id: item.id,
+    name: item.name || "",
+    icon: item.icon || "",
+    tip: item.tip || "",
+    url: item.url || "",
+    sortOrder: index + 1,
+    enabledFlag: item.enabledFlag ?? 1,
+  }));
+
 const loadConfig = async () => {
   const data = await getAdminSiteConfig();
   Object.assign(configForm, defaultSiteConfig);
@@ -266,10 +337,15 @@ const loadLinks = async () => {
   links.value = normalizeLinks(data || []);
 };
 
+const loadSocialLinks = async () => {
+  const data = await getAdminSocialLinks();
+  socialLinks.value = normalizeSocialLinks(data || []);
+};
+
 const loadAdminData = async () => {
   loading.value = true;
   try {
-    await Promise.all([loadConfig(), loadLinks()]);
+    await Promise.all([loadConfig(), loadLinks(), loadSocialLinks()]);
   } catch (error) {
     ElMessage.error(error.message || "读取配置失败");
   } finally {
@@ -305,8 +381,32 @@ const addLink = () => {
   });
 };
 
+const addSocialLink = () => {
+  socialLinks.value.push({
+    localId: `${Date.now()}-social-${socialLinks.value.length}`,
+    name: "",
+    icon: "",
+    tip: "",
+    url: "",
+    sortOrder: socialLinks.value.length + 1,
+    enabledFlag: 1,
+  });
+};
+
+const addCurrentItem = () => {
+  if (activeSection.value === "socials") {
+    addSocialLink();
+    return;
+  }
+  addLink();
+};
+
 const removeLink = (index) => {
   links.value.splice(index, 1);
+};
+
+const removeSocialLink = (index) => {
+  socialLinks.value.splice(index, 1);
 };
 
 const moveLink = (index, step) => {
@@ -315,6 +415,14 @@ const moveLink = (index, step) => {
   const [current] = nextLinks.splice(index, 1);
   nextLinks.splice(targetIndex, 0, current);
   links.value = nextLinks;
+};
+
+const moveSocialLink = (index, step) => {
+  const targetIndex = index + step;
+  const nextLinks = [...socialLinks.value];
+  const [current] = nextLinks.splice(index, 1);
+  nextLinks.splice(targetIndex, 0, current);
+  socialLinks.value = nextLinks;
 };
 
 const saveConfig = async () => {
@@ -342,11 +450,35 @@ const saveLinks = async () => {
   await loadLinks();
 };
 
+const saveSocialLinks = async () => {
+  const invalid = socialLinks.value.some(
+    (item) => !item.name || !item.icon || !item.tip || !item.url,
+  );
+  if (invalid) {
+    ElMessage.warning("请补全名称、图标、提示语和链接");
+    return;
+  }
+  await saveAdminSocialLinks(
+    socialLinks.value.map((item, index) => ({
+      name: item.name,
+      icon: item.icon,
+      tip: item.tip,
+      url: item.url,
+      sortOrder: index + 1,
+      enabledFlag: item.enabledFlag,
+    })),
+  );
+  ElMessage.success("社交链接已保存");
+  await loadSocialLinks();
+};
+
 const saveCurrentSection = async () => {
   saving.value = true;
   try {
     if (activeSection.value === "links") {
       await saveLinks();
+    } else if (activeSection.value === "socials") {
+      await saveSocialLinks();
     } else {
       await saveConfig();
     }
@@ -542,6 +674,11 @@ onMounted(async () => {
   gap: 12px;
 }
 
+.social-editor {
+  display: grid;
+  gap: 12px;
+}
+
 .link-row {
   display: grid;
   grid-template-columns: 42px 150px 160px minmax(220px, 1fr) 70px 40px 40px 40px;
@@ -551,6 +688,25 @@ onMounted(async () => {
   border-radius: 8px;
   background: rgb(255 255 255 / 10%);
   border: 1px solid rgb(255 255 255 / 12%);
+}
+
+.social-row {
+  display: grid;
+  grid-template-columns: 42px minmax(100px, 0.9fr) minmax(0, 1.35fr) minmax(0, 1fr) minmax(
+      0,
+      1.35fr
+    ) 56px 40px 40px 40px;
+  gap: 10px;
+  align-items: center;
+  padding: 12px;
+  border-radius: 8px;
+  background: rgb(255 255 255 / 10%);
+  border: 1px solid rgb(255 255 255 / 12%);
+}
+
+.link-row > *,
+.social-row > * {
+  min-width: 0;
 }
 
 .order {
@@ -663,6 +819,15 @@ onMounted(async () => {
       grid-column: 2 / 5;
     }
   }
+  .social-row {
+    grid-template-columns: 38px 1fr 1fr 58px;
+    .name-input,
+    .icon-input,
+    .tip-input,
+    .url-input {
+      grid-column: 2 / 5;
+    }
+  }
 }
 
 @media (max-width: 560px) {
@@ -673,6 +838,15 @@ onMounted(async () => {
     grid-template-columns: 34px 1fr 58px;
     .icon-select,
     .name-input,
+    .url-input {
+      grid-column: 2 / 4;
+    }
+  }
+  .social-row {
+    grid-template-columns: 34px 1fr 58px;
+    .name-input,
+    .icon-input,
+    .tip-input,
     .url-input {
       grid-column: 2 / 4;
     }
