@@ -29,7 +29,9 @@ def get_db() -> Generator[Session, None, None]:
 
 
 def init_db() -> None:
+    from home.models.site_config import CmsSiteConfig
     from home.models.site_link import CmsSiteLink
+    from home.repositories.site_config_repository import SiteConfigRepository
 
     Base.metadata.create_all(bind=engine)
     with SessionLocal() as db:
@@ -66,3 +68,5 @@ def init_db() -> None:
                 ]
             )
             db.commit()
+        if db.query(CmsSiteConfig).first() is None:
+            SiteConfigRepository(db).ensure_defaults()

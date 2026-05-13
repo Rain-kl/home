@@ -34,26 +34,16 @@ import { Icon } from "@vicons/utils";
 import { QuoteLeft, QuoteRight } from "@vicons/fa";
 import { Error } from "@icon-park/vue-next";
 import { mainStore } from "@/store";
+import { splitSiteUrl } from "@/utils/siteConfig";
 const store = mainStore();
 
-// 主页站点logo
-const siteLogo = import.meta.env.VITE_SITE_MAIN_LOGO;
-// 站点链接
-const siteUrl = computed(() => {
-  const url = import.meta.env.VITE_SITE_URL;
-  if (!url) return "imsyy.top".split(".");
-  // 判断协议前缀
-  if (url.startsWith("http://") || url.startsWith("https://")) {
-    const urlFormat = url.replace(/^(https?:\/\/)/, "");
-    return urlFormat.split(".");
-  }
-  return url.split(".");
-});
+const siteLogo = computed(() => store.siteConfig.siteMainLogo);
+const siteUrl = computed(() => splitSiteUrl(store.siteConfig.siteUrl));
 
 // 简介区域文字
 const descriptionText = reactive({
-  hello: import.meta.env.VITE_DESC_HELLO,
-  text: import.meta.env.VITE_DESC_TEXT,
+  hello: store.siteConfig.descHello,
+  text: store.siteConfig.descText,
 });
 
 // 切换右侧功能区
@@ -77,13 +67,26 @@ watch(
   () => store.boxOpenState,
   (value) => {
     if (value) {
-      descriptionText.hello = import.meta.env.VITE_DESC_HELLO_OTHER;
-      descriptionText.text = import.meta.env.VITE_DESC_TEXT_OTHER;
+      descriptionText.hello = store.siteConfig.descHelloOther;
+      descriptionText.text = store.siteConfig.descTextOther;
     } else {
-      descriptionText.hello = import.meta.env.VITE_DESC_HELLO;
-      descriptionText.text = import.meta.env.VITE_DESC_TEXT;
+      descriptionText.hello = store.siteConfig.descHello;
+      descriptionText.text = store.siteConfig.descText;
     }
   },
+);
+
+watch(
+  () => store.siteConfig,
+  () => {
+    descriptionText.hello = store.boxOpenState
+      ? store.siteConfig.descHelloOther
+      : store.siteConfig.descHello;
+    descriptionText.text = store.boxOpenState
+      ? store.siteConfig.descTextOther
+      : store.siteConfig.descText;
+  },
+  { deep: true },
 );
 </script>
 

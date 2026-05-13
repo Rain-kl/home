@@ -1,4 +1,6 @@
 import { defineStore } from "pinia";
+import { getSiteConfig } from "@/api";
+import { defaultSiteConfig } from "@/utils/siteConfig";
 
 export const mainStore = defineStore("main", {
   state: () => {
@@ -25,6 +27,8 @@ export const mainStore = defineStore("main", {
       playerAutoplay: false, // 是否自动播放
       playerLoop: "all", // 循环播放 "all", "one", "none"
       playerOrder: "list", // 循环顺序 "list", "random"
+      siteConfig: { ...defaultSiteConfig },
+      siteConfigLoaded: false,
     };
   },
   getters: {
@@ -43,8 +47,25 @@ export const mainStore = defineStore("main", {
     getInnerWidth(state) {
       return state.innerWidth;
     },
+    getSiteConfig(state) {
+      return state.siteConfig;
+    },
   },
   actions: {
+    async loadSiteConfig() {
+      try {
+        const data = await getSiteConfig();
+        this.siteConfig = {
+          ...defaultSiteConfig,
+          ...(data || {}),
+        };
+      } catch (error) {
+        console.error("站点配置读取失败，使用本地默认配置", error);
+        this.siteConfig = { ...defaultSiteConfig };
+      } finally {
+        this.siteConfigLoaded = true;
+      }
+    },
     // 更改当前页面宽度
     setInnerWidth(value) {
       this.innerWidth = value;

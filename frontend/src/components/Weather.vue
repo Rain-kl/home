@@ -20,9 +20,10 @@
 <script setup>
 import { getAdcode, getWeather, getOtherWeather } from "@/api";
 import { Error } from "@icon-park/vue-next";
+import { mainStore } from "@/store";
 
-// 高德开发者 Key
-const mainKey = import.meta.env.VITE_WEATHER_KEY;
+const store = mainStore();
+const mainKey = computed(() => store.siteConfig.weatherKey);
 
 // 天气数据
 const weatherData = reactive({
@@ -54,7 +55,7 @@ const getTemperature = (min, max) => {
 const getWeatherData = async () => {
   try {
     // 获取地理位置信息
-    if (!mainKey) {
+    if (!mainKey.value) {
       console.log("未配置，使用备用天气接口");
       const result = await getOtherWeather();
       console.log(result);
@@ -71,7 +72,7 @@ const getWeatherData = async () => {
       };
     } else {
       // 获取 Adcode
-      const adCode = await getAdcode(mainKey);
+      const adCode = await getAdcode(mainKey.value);
       console.log(adCode);
       if (adCode.infocode !== "10000") {
         throw "地区查询失败";
@@ -81,7 +82,7 @@ const getWeatherData = async () => {
         adcode: adCode.adcode,
       };
       // 获取天气信息
-      const result = await getWeather(mainKey, weatherData.adCode.adcode);
+      const result = await getWeather(mainKey.value, weatherData.adCode.adcode);
       weatherData.weather = {
         weather: result.lives[0].weather,
         temperature: result.lives[0].temperature,

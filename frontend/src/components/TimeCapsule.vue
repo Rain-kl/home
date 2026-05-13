@@ -34,7 +34,7 @@ const store = mainStore();
 
 // 进度条数据
 const timeData = ref(getTimeCapsule());
-const startDate = ref(import.meta.env.VITE_SITE_START);
+const startDate = computed(() => store.siteConfig.siteStart);
 const startDateText = ref(null);
 const timeInterval = ref(null);
 

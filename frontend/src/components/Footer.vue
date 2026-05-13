@@ -45,27 +45,19 @@
 import { MusicOne } from "@icon-park/vue-next";
 import { mainStore } from "@/store";
 import config from "@/../package.json";
+import { normalizeSiteHref } from "@/utils/siteConfig";
 
 const store = mainStore();
 const fullYear = new Date().getFullYear();
 
 // 加载配置数据
 // const siteStartDate = ref(import.meta.env.VITE_SITE_START);
-const startYear = ref(
-  import.meta.env.VITE_SITE_START?.length >= 4 ? 
-  import.meta.env.VITE_SITE_START.substring(0, 4) : null
+const startYear = computed(() =>
+  store.siteConfig.siteStart?.length >= 4 ? store.siteConfig.siteStart.substring(0, 4) : null,
 );
-const siteIcp = ref(import.meta.env.VITE_SITE_ICP);
-const siteAuthor = ref(import.meta.env.VITE_SITE_AUTHOR);
-const siteUrl = computed(() => {
-  const url = import.meta.env.VITE_SITE_URL;
-  if (!url) return "https://www.imsyy.top";
-  // 判断协议前缀
-  if (!url.startsWith("http://") && !url.startsWith("https://")) {
-    return "//" + url;
-  }
-  return url;
-});
+const siteIcp = computed(() => store.siteConfig.siteIcp);
+const siteAuthor = computed(() => store.siteConfig.siteAuthor);
+const siteUrl = computed(() => normalizeSiteHref(store.siteConfig.siteUrl));
 </script>
 
 <style lang="scss" scoped>

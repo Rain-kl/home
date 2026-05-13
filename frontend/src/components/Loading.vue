@@ -19,8 +19,7 @@ import { mainStore } from "@/store";
 
 const store = mainStore();
 
-// 配置
-const siteName = import.meta.env.VITE_SITE_NAME;
+const siteName = computed(() => store.siteConfig.siteName);
 </script>
 
 <style lang="scss" scoped>

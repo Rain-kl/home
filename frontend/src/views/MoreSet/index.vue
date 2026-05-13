@@ -56,21 +56,12 @@ import { CloseOne, SettingTwo, GithubOne, AddOne, Bug } from "@icon-park/vue-nex
 import { mainStore } from "@/store";
 import Set from "@/components/Set.vue";
 import config from "@/../package.json";
+import { splitSiteUrl } from "@/utils/siteConfig";
 
 const store = mainStore();
 const closeShow = ref(false);
 
-// 站点链接
-const siteUrl = computed(() => {
-  const url = import.meta.env.VITE_SITE_URL;
-  if (!url) return "imsyy.top".split(".");
-  // 判断协议前缀
-  if (url.startsWith("http://") || url.startsWith("https://")) {
-    const urlFormat = url.replace(/^(https?:\/\/)/, "");
-    return urlFormat.split(".");
-  }
-  return url.split(".");
-});
+const siteUrl = computed(() => splitSiteUrl(store.siteConfig.siteUrl));
 
 // 更新日志
 const upData = reactive({

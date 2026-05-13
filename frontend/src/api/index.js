@@ -21,7 +21,17 @@ const request = async (url, options = {}) => {
 
 export const getSiteLinks = () => request("/pub/site-links");
 
+export const getSiteConfig = () => request("/pub/site-config");
+
 export const getAdminSiteLinks = () => request("/cms/site-links");
+
+export const getAdminSiteConfig = () => request("/cms/site-config");
+
+export const saveAdminSiteConfig = (configs) =>
+  request("/cms/site-config", {
+    method: "POST",
+    body: JSON.stringify({ configs }),
+  });
 
 export const saveAdminSiteLinks = (links) =>
   request("/cms/site-links", {
@@ -48,9 +58,9 @@ export const logoutAdmin = () =>
  */
 
 // 获取音乐播放列表
-export const getPlayerList = async (server, type, id) => {
+export const getPlayerList = async (server, type, id, apiUrl) => {
   const res = await fetch(
-    `${import.meta.env.VITE_SONG_API}?server=${server}&type=${type}&id=${id}`,
+    `${apiUrl || import.meta.env.VITE_SONG_API}?server=${server}&type=${type}&id=${id}`,
   );
   const data = await res.json();
 

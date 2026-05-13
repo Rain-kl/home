@@ -80,6 +80,8 @@ watch(
 );
 
 onMounted(() => {
+  store.loadSiteConfig();
+
   // 自定义鼠标
   cursorInit();
 

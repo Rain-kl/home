@@ -57,6 +57,7 @@
           />
           <Player
             ref="playerRef"
+            :songApi="playerData.api"
             :songServer="playerData.server"
             :songType="playerData.type"
             :songId="playerData.id"
@@ -91,10 +92,22 @@ const volumeNum = ref(store.musicVolume ? store.musicVolume : 0.7);
 const musicListShow = ref(false);
 const playerRef = ref(null);
 const playerData = reactive({
-  server: import.meta.env.VITE_SONG_SERVER,
-  type: import.meta.env.VITE_SONG_TYPE,
-  id: import.meta.env.VITE_SONG_ID,
+  api: store.siteConfig.songApi,
+  server: store.siteConfig.songServer,
+  type: store.siteConfig.songType,
+  id: store.siteConfig.songId,
 });
+
+watch(
+  () => store.siteConfig,
+  (config) => {
+    playerData.api = config.songApi;
+    playerData.server = config.songServer;
+    playerData.type = config.songType;
+    playerData.id = config.songId;
+  },
+  { deep: true },
+);
 
 // 开启播放列表
 const openMusicList = () => {

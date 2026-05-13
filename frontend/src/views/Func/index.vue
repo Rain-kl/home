@@ -41,8 +41,7 @@ const store = mainStore();
 const currentTime = ref({});
 const timeInterval = ref(null);
 
-// 播放器 id
-const playerHasId = import.meta.env.VITE_SONG_ID;
+const playerHasId = computed(() => Boolean(store.siteConfig.songId));
 
 // 更新时间
 const updateTimeData = () => {
