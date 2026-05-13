@@ -22,24 +22,6 @@
           />
         </div>
         <div class="item">
-          <span class="text">音乐点击是否打开面板</span>
-          <el-switch
-            v-model="musicClick"
-            inline-prompt
-            :active-icon="CheckSmall"
-            :inactive-icon="CloseSmall"
-          />
-        </div>
-        <div class="item">
-          <span class="text">底栏歌词显示</span>
-          <el-switch
-            v-model="playerLrcShow"
-            inline-prompt
-            :active-icon="CheckSmall"
-            :inactive-icon="CloseSmall"
-          />
-        </div>
-        <div class="item">
           <span class="text">底栏背景模糊</span>
           <el-switch
             v-model="footerBlur"
@@ -49,37 +31,7 @@
           />
         </div>
       </el-collapse-item>
-      <el-collapse-item title="播放器配置" name="3">
-        <div class="item">
-          <span class="text">自动播放</span>
-          <el-switch
-            v-model="playerAutoplay"
-            inline-prompt
-            :active-icon="CheckSmall"
-            :inactive-icon="CloseSmall"
-          />
-        </div>
-        <div class="item">
-          <span class="text">随机播放</span>
-          <el-switch
-            v-model="playerOrder"
-            inline-prompt
-            :active-icon="CheckSmall"
-            :inactive-icon="CloseSmall"
-            active-value="random"
-            inactive-value="list"
-          />
-        </div>
-        <div class="item">
-          <span class="text">循环模式</span>
-          <el-radio-group v-model="playerLoop" size="small" text-color="#FFFFFF">
-            <el-radio value="all" border>列表</el-radio>
-            <el-radio value="one" border>单曲</el-radio>
-            <el-radio value="none" border>不循环</el-radio>
-          </el-radio-group>
-        </div>
-      </el-collapse-item>
-      <el-collapse-item title="其他设置" name="4">
+      <el-collapse-item title="其他设置" name="3">
         <div>设置内容待增加</div>
       </el-collapse-item>
     </el-collapse>
@@ -95,12 +47,7 @@ const store = mainStore();
 const {
   coverType,
   siteStartShow,
-  musicClick,
-  playerLrcShow,
   footerBlur,
-  playerAutoplay,
-  playerOrder,
-  playerLoop,
 } = storeToRefs(store);
 
 // 默认选中项

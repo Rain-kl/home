@@ -1,7 +1,7 @@
 export const defaultSiteConfig = {
-  siteName: import.meta.env.VITE_SITE_NAME || "無名の主页",
-  siteAuthor: import.meta.env.VITE_SITE_AUTHOR || "無名",
-  siteKeywords: import.meta.env.VITE_SITE_KEYWORDS || "無名,个人主页",
+  siteName: import.meta.env.VITE_SITE_NAME || "主页",
+  siteAuthor: import.meta.env.VITE_SITE_AUTHOR || "Author",
+  siteKeywords: import.meta.env.VITE_SITE_KEYWORDS || "个人主页",
   siteDescription: import.meta.env.VITE_SITE_DES || "一个默默无闻的主页",
   siteUrl: import.meta.env.VITE_SITE_URL || "imsyy.top",
   siteLogo: import.meta.env.VITE_SITE_LOGO || "/images/icon/favicon.ico",
@@ -14,10 +14,6 @@ export const defaultSiteConfig = {
   weatherKey: import.meta.env.VITE_WEATHER_KEY || "",
   siteStart: import.meta.env.VITE_SITE_START || "2020-10-24",
   siteIcp: import.meta.env.VITE_SITE_ICP || "",
-  songApi: import.meta.env.VITE_SONG_API || "https://api-meting.imsyy.top/api",
-  songServer: import.meta.env.VITE_SONG_SERVER || "netease",
-  songType: import.meta.env.VITE_SONG_TYPE || "playlist",
-  songId: import.meta.env.VITE_SONG_ID || "",
 };
 
 export const splitSiteUrl = (url = defaultSiteConfig.siteUrl) => {

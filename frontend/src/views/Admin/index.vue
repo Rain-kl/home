@@ -17,7 +17,13 @@
               @keyup.enter="handleLogin"
             />
           </el-form-item>
-          <el-button class="login-button" type="primary" size="large" :loading="loading" @click="handleLogin">
+          <el-button
+            class="login-button"
+            type="primary"
+            size="large"
+            :loading="loading"
+            @click="handleLogin"
+          >
             登录
           </el-button>
         </el-form>
@@ -42,7 +48,13 @@
         </button>
         <div class="nav-spacer" />
         <div class="nav-actions">
-          <el-button :icon="RefreshOne" circle :loading="loading" title="刷新" @click="loadAdminData" />
+          <el-button
+            :icon="RefreshOne"
+            circle
+            :loading="loading"
+            title="刷新"
+            @click="loadAdminData"
+          />
           <el-button :icon="Logout" circle title="退出登录" @click="handleLogout" />
         </div>
       </aside>
@@ -57,7 +69,9 @@
             <el-button v-if="activeSection === 'links'" :icon="Add" type="primary" @click="addLink">
               新增链接
             </el-button>
-            <el-button :icon="Save" :loading="saving" @click="saveCurrentSection">保存配置</el-button>
+            <el-button :icon="Save" :loading="saving" @click="saveCurrentSection"
+              >保存配置</el-button
+            >
           </div>
         </header>
 
@@ -93,7 +107,13 @@
             <el-input v-model="item.name" class="name-input" placeholder="名称" />
             <el-input v-model="item.link" class="url-input" placeholder="https://example.com" />
             <el-switch v-model="item.enabledFlag" :active-value="1" :inactive-value="0" />
-            <el-button :icon="Up" circle title="上移" :disabled="index === 0" @click="moveLink(index, -1)" />
+            <el-button
+              :icon="Up"
+              circle
+              title="上移"
+              :disabled="index === 0"
+              @click="moveLink(index, -1)"
+            />
             <el-button
               :icon="Down"
               circle
@@ -101,7 +121,13 @@
               :disabled="index === links.length - 1"
               @click="moveLink(index, 1)"
             />
-            <el-button :icon="Delete" circle title="删除" type="danger" @click="removeLink(index)" />
+            <el-button
+              :icon="Delete"
+              circle
+              title="删除"
+              type="danger"
+              @click="removeLink(index)"
+            />
           </div>
         </div>
       </section>
@@ -118,7 +144,7 @@ import {
   EditName,
   LinkOne,
   Logout,
-  MusicOne,
+  SunOne,
   RefreshOne,
   Save,
   Up,
@@ -134,17 +160,28 @@ import {
 } from "@/api";
 import { defaultSiteConfig } from "@/utils/siteConfig";
 
-const iconOptions = ["Blog", "Cloud", "CompactDisc", "Compass", "Book", "Fire", "LaptopCode", "Link"];
+const iconOptions = [
+  "Blog",
+  "Cloud",
+  "CompactDisc",
+  "Compass",
+  "Book",
+  "Fire",
+  "LaptopCode",
+  "Link",
+];
 
 const sectionMap = {
   site: {
     title: "站点资料",
     eyebrow: "基础资源",
     fields: [
-      ["siteName", "站点名称", "加载页与应用名称", "例如：無名の主页"],
+      ["siteName", "站点名称", "加载页与应用名称", "例如：主页"],
       ["siteAuthor", "作者", "页脚版权展示", "例如：Ryan"],
       ["siteUrl", "站点地址", "Logo 文本与页脚链接", "example.com"],
+      ["siteLogo", "标签图标", "浏览器标题栏与书签图标", "/images/icon/favicon.ico"],
       ["siteMainLogo", "主页头像", "左侧主视觉 Logo", "/images/icon/logo.png"],
+      ["siteAppleLogo", "Apple 图标", "iOS 添加到主屏幕时使用", "/images/logo/apple-touch-icon.png"],
       ["siteStart", "建站日期", "YYYY-MM-DD 或 YYYY", "2020-10-24"],
       ["siteIcp", "ICP备案号", "留空则不显示", "豫ICP备..."],
       ["siteKeywords", "关键词", "用于站点元信息", "个人主页,导航"],
@@ -162,22 +199,16 @@ const sectionMap = {
     ],
   },
   media: {
-    title: "音乐与天气",
+    title: "天气服务",
     eyebrow: "外部服务",
-    fields: [
-      ["songApi", "歌曲 API", "Meting API 地址", "https://api-meting.imsyy.top/api"],
-      ["songServer", "歌曲服务器", "netease 或 tencent", "netease"],
-      ["songType", "播放类型", "song / playlist / album / search / artist", "playlist"],
-      ["songId", "播放 ID", "留空则隐藏播放器", "9379831714"],
-      ["weatherKey", "高德天气 Key", "留空则使用备用天气接口", ""],
-    ],
+    fields: [["weatherKey", "高德天气 Key", "留空则使用备用天气接口", ""]],
   },
 };
 
 const navItems = [
   { key: "site", label: "站点资料", icon: Config },
   { key: "description", label: "首页文案", icon: EditName },
-  { key: "media", label: "音乐天气", icon: MusicOne },
+  { key: "media", label: "天气服务", icon: SunOne },
   { key: "links", label: "导航链接", icon: LinkOne },
 ];
 
@@ -348,9 +379,9 @@ onMounted(async () => {
   position: relative;
   z-index: 3;
   width: 100%;
-  min-height: 100%;
+  height: 100%;
   padding: 40px;
-  overflow: auto;
+  overflow-y: auto;
   background: rgb(0 0 0 / 35%);
   backdrop-filter: blur(14px);
   animation: fade 0.5s;
@@ -545,6 +576,52 @@ onMounted(async () => {
 :deep(.el-select__selected-item),
 :deep(.el-textarea__inner) {
   color: #fff;
+}
+
+// Keep admin buttons readable against the page's glass background.
+:deep(.el-button) {
+  --el-button-text-color: #fff;
+  --el-button-bg-color: rgb(0 0 0 / 60%);
+  --el-button-border-color: rgb(255 255 255 / 20%);
+  --el-button-hover-text-color: #fff;
+  --el-button-hover-bg-color: rgb(0 0 0 / 80%);
+  --el-button-hover-border-color: rgb(255 255 255 / 40%);
+  --el-button-active-text-color: #fff;
+  --el-button-active-bg-color: rgb(0 0 0 / 85%);
+  --el-button-active-border-color: rgb(255 255 255 / 48%);
+}
+
+:deep(.el-button--default) {
+  color: #fff;
+  background-color: rgb(0 0 0 / 60%);
+  border-color: rgb(255 255 255 / 20%);
+
+  &:hover,
+  &:focus {
+    background-color: rgb(0 0 0 / 80%);
+    border-color: rgb(255 255 255 / 40%);
+  }
+}
+
+:deep(.el-button--primary) {
+  color: #fff;
+  background-color: #000;
+  border-color: rgb(255 255 255 / 24%);
+
+  &:hover,
+  &:focus {
+    color: #fff;
+    background-color: rgb(0 0 0 / 88%);
+    border-color: rgb(255 255 255 / 42%);
+  }
+}
+
+:deep(.el-button--default *) {
+  color: inherit;
+}
+
+:deep(.el-button--primary *) {
+  color: inherit;
 }
 
 @media (max-width: 980px) {

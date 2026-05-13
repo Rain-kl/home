@@ -5,9 +5,9 @@ from home.models.site_config import CmsSiteConfig
 
 
 DEFAULT_SITE_CONFIGS = [
-    ("siteName", "無名の主页", "site", "站点名称"),
+    ("siteName", "主页", "site", "站点名称"),
     ("siteAuthor", "Ryan", "site", "站点作者"),
-    ("siteKeywords", "無名,个人主页", "site", "关键词"),
+    ("siteKeywords", "个人主页", "site", "关键词"),
     ("siteDescription", "一个默默无闻的主页", "site", "站点简介"),
     ("siteUrl", "Arctel.net", "site", "站点地址"),
     ("siteLogo", "/images/icon/favicon.ico", "site", "浏览器图标"),
@@ -20,10 +20,6 @@ DEFAULT_SITE_CONFIGS = [
     ("weatherKey", "", "weather", "高德天气 Key"),
     ("siteStart", "2020-10-24", "site", "建站日期"),
     ("siteIcp", "", "site", "ICP备案号"),
-    ("songApi", "https://api-meting.imsyy.top/api", "music", "歌曲 API"),
-    ("songServer", "netease", "music", "歌曲服务器"),
-    ("songType", "playlist", "music", "播放类型"),
-    ("songId", "9379831714", "music", "播放 ID"),
 ]
 
 

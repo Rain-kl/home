@@ -27,9 +27,9 @@
         <component :is="store.mobileOpenState ? CloseSmall : HamburgerButton" />
       </Icon>
       <!-- 页脚 -->
-<!--      <Transition name="fade" mode="out-in">-->
-<!--        <Footer class="f-ter" v-show="!store.backgroundShow && !store.setOpenState" />-->
-<!--      </Transition>-->
+      <!--      <Transition name="fade" mode="out-in">-->
+      <!--        <Footer class="f-ter" v-show="!store.backgroundShow && !store.setOpenState" />-->
+      <!--      </Transition>-->
     </main>
   </Transition>
 </template>
@@ -48,10 +48,50 @@ import Box from "@/views/Box/index.vue";
 import MoreSet from "@/views/MoreSet/index.vue";
 import Admin from "@/views/Admin/index.vue";
 import cursorInit from "@/utils/cursor.js";
+import { defaultSiteConfig } from "@/utils/siteConfig";
 import config from "@/../package.json";
 
 const store = mainStore();
 const isAdminPage = computed(() => window.location.pathname.startsWith("/admin"));
+
+const withHeadVersion = (url) => {
+  if (!url) {
+    return "";
+  }
+  const separator = url.includes("?") ? "&" : "?";
+  return `${url}${separator}v=${encodeURIComponent(store.siteConfig.siteName || "site")}`;
+};
+
+const setHeadMeta = (name, content) => {
+  const meta = document.head.querySelector(`meta[name="${name}"]`);
+  if (meta) {
+    meta.setAttribute("content", content || "");
+  }
+};
+
+const setHeadLink = (selector, href) => {
+  const link = document.head.querySelector(selector);
+  if (link) {
+    link.setAttribute("href", href || "");
+  }
+};
+
+const applySiteHead = (siteConfig) => {
+  const siteLogo = withHeadVersion(siteConfig.siteLogo || defaultSiteConfig.siteLogo);
+  const siteAppleLogo = withHeadVersion(
+    siteConfig.siteAppleLogo || defaultSiteConfig.siteAppleLogo,
+  );
+
+  document.title = siteConfig.siteName || defaultSiteConfig.siteName;
+  setHeadMeta("description", siteConfig.siteDescription || defaultSiteConfig.siteDescription);
+  setHeadMeta("keywords", siteConfig.siteKeywords || defaultSiteConfig.siteKeywords);
+  setHeadMeta("author", siteConfig.siteAuthor || defaultSiteConfig.siteAuthor);
+  setHeadLink('link[rel="icon"]', siteLogo);
+  setHeadLink('link[rel="shortcut icon"]', siteLogo);
+  setHeadLink('link[rel="bookmark"]', siteLogo);
+  setHeadLink('link[rel="apple-touch-icon"]', siteAppleLogo);
+  setHeadLink('link[rel="apple-touch-icon-precomposed"]', siteAppleLogo);
+};
 
 // 页面宽度
 const getWidth = () => {
@@ -76,6 +116,17 @@ watch(
       store.boxOpenState = false;
       store.setOpenState = false;
     }
+  },
+);
+
+watch(
+  () => store.siteConfig,
+  (siteConfig) => {
+    applySiteHead(siteConfig);
+  },
+  {
+    immediate: true,
+    deep: true,
   },
 );
 
@@ -208,19 +259,23 @@ onBeforeUnmount(() => {
         // w 1201px ~ max
         padding-left: 0.7vw;
         padding-right: 0.25vw;
-        @media (max-width: 1200px) { // w 1101px ~ 1280px
+        @media (max-width: 1200px) {
+          // w 1101px ~ 1280px
           padding-left: 2.3vw;
           padding-right: 1.75vw;
         }
-        @media (max-width: 1100px) { // w 993px ~ 1100px
+        @media (max-width: 1100px) {
+          // w 993px ~ 1100px
           padding-left: 2vw;
           padding-right: calc(2vw - 6px);
         }
-        @media (max-width: 992px) { // w 901px ~ 992px
+        @media (max-width: 992px) {
+          // w 901px ~ 992px
           padding-left: 2.3vw;
           padding-right: 1.7vw;
         }
-        @media (max-width: 900px) { // w 391px ~ 900px
+        @media (max-width: 900px) {
+          // w 391px ~ 900px
           padding-left: 2vw;
           padding-right: calc(2vw - 6px);
         }
